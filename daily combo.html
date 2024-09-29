@@ -1,0 +1,438 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Daily Combo</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            margin: 0;
+            padding: 0;
+            background-color: #1a1a1a;
+            color: #fff;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+        }
+        header, footer {
+            width: 100%;
+            max-width: 1200px;
+            background-color: #2c2c2c;
+            padding: 20px;
+            text-align: center;
+        }
+        .header-top {
+            display: flex;
+            justify-content: space-between;
+            padding: 10px 20px;
+        }
+        .back-button {
+            background-color: #444;
+            padding: 5px 10px;
+            border-radius: 5px;
+            cursor: pointer;
+        }
+        .header-combo {
+            display: flex;
+            justify-content: center;
+            gap: 10px;
+            margin: 20px 0;
+        }
+        .combo-box {
+            background-color: #444;
+            width: 60px;
+            height: 60px;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            border-radius: 5px;
+            position: relative;
+        }
+        .combo-box img {
+            width: 100%;
+            height: 100%;
+            opacity: 0;
+            transition: opacity 1s ease;
+        }
+        .combo-bonus {
+            background-color: #ffcc00;
+            padding: 10px;
+            border-radius: 5px;
+            font-size: 18px;
+            margin-left: 10px;
+        }
+        .total-profit {
+            font-size: 24px;
+            margin: 20px 0;
+        }
+        main {
+            padding: 20px;
+            width: 100%;
+            max-width: 1200px;
+        }
+        .teams {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 10px;
+        }
+        .team {
+            background-color: #333;
+            padding: 10px;
+            border-radius: 10px;
+            text-align: center;
+            cursor: pointer;
+            position: relative;
+        }
+        .team img {
+            width: 50px;
+            height: 50px;
+        }
+        .info {
+            margin-top: 10px;
+        }
+        footer {
+            text-align: center;
+        }
+        nav a {
+            color: #ffcc00;
+            text-decoration: none;
+            margin: 0 10px;
+        }
+        /* Modal styles */
+        .modal {
+            display: none;
+            position: fixed;
+            z-index: 1;
+            left: 0;
+            top: 0;
+            width: 100%;
+            height: 100%;
+            overflow: auto;
+            background-color: rgba(0, 0, 0, 0.5);
+        }
+        .modal-content {
+            background-color: #333;
+            margin: 15% auto;
+            padding: 20px;
+            border: 1px solid #888;
+            width: 80%;
+            max-width: 400px;
+            text-align: center;
+            border-radius: 10px;
+        }
+        .close {
+            color: #aaa;
+            float: right;
+            font-size: 28px;
+            font-weight: bold;
+        }
+        .close:hover,
+        .close:focus {
+            color: #fff;
+            text-decoration: none;
+            cursor: pointer;
+        }
+        .modal img {
+            width: 100px;
+            height: 100px;
+        }
+        .modal button {
+            background-color: #ffcc00;
+            color: #333;
+            border: none;
+            padding: 10px 20px;
+            margin: 10px;
+            cursor: pointer;
+            border-radius: 5px;
+        }
+        /* Notification styles */
+        .notification {
+            display: none;
+            position: fixed;
+            top: 20%;
+            left: 50%;
+            transform: translateX(-50%);
+            background-color: #333;
+            color: #fff;
+            padding: 20px;
+            border-radius: 5px;
+            text-align: center;
+            z-index: 10;
+        }
+        /* Alert message styles */
+        .alert-message {
+            background-color: #ff0000;
+            color: #fff;
+            padding: 10px;
+            border-radius: 5px;
+            margin-top: 10px;
+            display: none;
+        }
+    </style>
+</head>
+<body>
+    <header>
+        <div class="header-top">
+            <div id="backButton" class="back-button">Back</div>
+            <span class="profit">Profit per hour: +271.66K</span>
+        </div>
+        <div class="header-combo">
+            <div class="combo-box" id="headerCombo1"><img src="" alt="Claimed Team"></div>
+            <div class="combo-box" id="headerCombo2"><img src="" alt="Claimed Team"></div>
+            <div class="combo-box" id="headerCombo3"><img src="" alt="Claimed Team"></div>
+            <div class="combo-bonus">+5,000,000</div>
+        </div>
+        <div class="total-profit">33,195,100</div>
+    </header>
+    <main>
+        <section class="teams">
+            <div class="team" id="ceo">
+                <img src="pexels-photo-849524.jpeg" alt="CEO">
+                <div class="info">
+                    <h3>CEO</h3>
+                    <p>Profit per hour: 575</p>
+                    <p>Level 5</p>
+                    <p>Total Profit: 2.65K</p>
+                </div>
+            </div>
+            <div class="team" id="marketing">
+                <img src="pexels-photo-927805.jpeg" alt="Marketing">
+                <div class="info">
+                    <h3>Marketing</h3>
+                    <p>Profit per hour: 311</p>
+                    <p>Level 4</p>
+                    <p>Total Profit: 1.98K</p>
+                </div>
+            </div>
+            <div class="team" id="it-team">
+                <img src="pexels-photo-1393382.jpeg" alt="IT Team">
+                <div class="info">
+                    <h3>IT Team</h3>
+                    <p>Profit per hour: 6.03K</p>
+                    <p>Level 15</p>
+                    <p>Total Profit: 1.45M</p>
+                </div>
+            </div>
+            <div class="team" id="support-team">
+                <img src="444 (1).jpg" alt="Support Team">
+                <div class="info">
+                    <h3>Support Team</h3>
+                    <p>Profit per hour: 70</p>
+                    <p>Level 1</p>
+                    <p>Total Profit: 827</p>
+                </div>
+            </div>
+            <div class="team" id="coinbook">
+                <img src="444 (3).jpeg" alt="coinBook">
+                <div class="info">
+                    <h3>coinBook</h3>
+                    <p>Profit per hour: 501</p>
+                    <p>Level 6</p>
+                    <p>Total Profit: 1.87K</p>
+                </div>
+            </div>
+            <div class="team" id="cointube">
+                <img src="444 (2).jpeg" alt="coinTube">
+                <div class="info">
+                    <h3>coinTube</h3>
+                    <p>Profit per hour: 923</p>
+                    <p>Level 8</p>
+                    <p>Total Profit: 5.13K</p>
+                </div>
+            </div>
+            <div class="team" id="cointelegraph">
+                <img src="444 (1).jpeg" alt="Cointelegraph">
+                <div class="info">
+                    <h3>Cointelegraph</h3>
+                    <p>Profit per hour: 83</p>
+                    <p>Level 2</p>
+                    <p>Total Profit: 447</p>
+                </div>
+            </div>
+            <div class="team" id="coingram">
+                <img src="444 (4).jpeg" alt="coinGram">
+                <div class="info">
+                    <h3>coinGram</h3>
+                    <p>Profit per hour: 80</p>
+                    <p>Level 1</p>
+                    <p>Total Profit: 420</p>
+                </div>
+            </div>
+        </section>
+    </main>
+    <footer>
+        <div id="myModal" class="modal">
+            <div class="modal-content">
+                <span class="close">&times;</span>
+                <img id="modalImage" src="" alt="Claimed Image">
+                <button id="claimButton">Claim</button>
+                <button id="paidButton">Paid</button>
+                <div class="alert-message" id="alertMessage">Please tap "Paid" button first!</div>
+            </div>
+        </div>
+        <div class="notification" id="notification"></div>
+    </footer>
+    <script>
+        document.addEventListener('DOMContentLoaded', function () {
+            const modal = document.getElementById("myModal");
+            const modalImage = document.getElementById("modalImage");
+            const claimButton = document.getElementById("claimButton");
+            const paidButton = document.getElementById("paidButton");
+            const closeButton = document.querySelector(".close");
+            const notification = document.getElementById("notification");
+            const alertMessage = document.getElementById("alertMessage");
+            const backButton = document.getElementById("backButton");
+
+            const boxes = Array.from(document.querySelectorAll(".header-combo .combo-box"));
+            let currentIndex = 0;
+            let claimedImage = null;
+            let claimCount = 0;
+            let totalProfit = parseFloat(localStorage.getItem('totalProfit') || '0');
+            let paidButtonClicked = false;
+            let isNewUser = !localStorage.getItem('hasBeenHere');
+
+            // Initialize total profit if user is new
+            if (isNewUser) {
+                totalProfit += 5000;
+                localStorage.setItem('totalProfit', totalProfit.toString());
+                localStorage.setItem('hasBeenHere', 'true');
+            }
+
+            document.querySelector(".total-profit").textContent = totalProfit.toLocaleString();
+
+            function updateTotalProfit(amount) {
+                totalProfit += amount;
+                document.querySelector(".total-profit").textContent = totalProfit.toLocaleString();
+                localStorage.setItem('totalProfit', totalProfit.toString());
+            }
+
+            function canClaim() {
+                const lastClaimTime = localStorage.getItem('lastClaimTime');
+                const now = new Date().getTime();
+                if (!lastClaimTime) return true;
+                const timePassed = now - parseInt(lastClaimTime);
+                return timePassed >= 24 * 60 * 60 * 1000;
+            }
+
+            function setClaimTime() {
+                localStorage.setItem('lastClaimTime', new Date().getTime().toString());
+            }
+
+            function showNotification(message) {
+                notification.textContent = message;
+                notification.style.display = "block";
+                setTimeout(() => {
+                    notification.style.display = "none";
+                }, 5000);
+            }
+
+            function showAlert(message) {
+                alertMessage.textContent = message;
+                alertMessage.style.display = "block";
+                setTimeout(() => {
+                    alertMessage.style.display = "none";
+                }, 5000);
+            }
+
+            function getClaimedImages() {
+                return JSON.parse(localStorage.getItem('claimedImages')) || {};
+            }
+
+            function setClaimedImage(id, imageSrc, timestamp) {
+                const claimedImages = getClaimedImages();
+                claimedImages[id] = { imageSrc, timestamp };
+                localStorage.setItem('claimedImages', JSON.stringify(claimedImages));
+            }
+
+            function isImageClaimedRecently(id) {
+                const claimedImages = getClaimedImages();
+                const claimed = claimedImages[id];
+                if (claimed) {
+                    const now = new Date().getTime();
+                    const timePassed = now - claimed.timestamp;
+                    return timePassed < 24 * 60 * 60 * 1000; // Less than 24 hours
+                }
+                return false;
+            }
+
+            document.querySelectorAll(".team").forEach(team => {
+                team.addEventListener("click", (event) => {
+                    if (!claimedImage) {
+                        modal.style.display = "block";
+                        modalImage.src = event.target.closest(".team").querySelector("img").src;
+                        claimedImage = modalImage.src;
+                    }
+                });
+            });
+
+            closeButton.addEventListener("click", () => {
+                modal.style.display = "none";
+                alertMessage.style.display = "none"; // Hide alert when closing the modal
+            });
+
+            window.onclick = function (event) {
+                if (event.target === modal) {
+                    modal.style.display = "none";
+                    alertMessage.style.display = "none"; // Hide alert when clicking outside modal
+                }
+            };
+
+            paidButton.addEventListener("click", () => {
+                const currentTotalProfit = parseFloat(document.querySelector(".total-profit").textContent.replace(/,/g, ''));
+                if (currentTotalProfit >= 1000) {
+                    totalProfit = currentTotalProfit - 1000;
+                    document.querySelector(".total-profit").textContent = totalProfit.toLocaleString();
+                    localStorage.setItem('totalProfit', totalProfit.toString());
+                    paidButtonClicked = true; // Mark Paid button as clicked
+                    showNotification('1000 coins have been subtracted.');
+                } else {
+                    showNotification('Insufficient coins to subtract.');
+                }
+            });
+
+            claimButton.addEventListener("click", () => {
+                if (!paidButtonClicked) {
+                    showAlert('Please tap "Paid" button first!');
+                    return;
+                }
+
+                if (!canClaim()) {
+                    showNotification('You must wait 24 hours before claiming again.');
+                    return;
+                }
+
+                if (claimedImage && boxes.length > 0) {
+                    const box = boxes[currentIndex];
+                    const img = box.querySelector("img");
+                    img.src = claimedImage;
+                    img.style.opacity = "1";
+                    box.style.backgroundColor = "#ffcc00";
+
+                    setClaimedImage(box.id, claimedImage, new Date().getTime());
+
+                    claimCount++;
+
+                    if (claimCount >= 3) {
+                        const bonus = parseFloat(document.querySelector(".combo-bonus").textContent.replace(/,/g, ''));
+                        showNotification(`Congratulations! You've earned a bonus of: ${bonus.toLocaleString()}`);
+                        updateTotalProfit(bonus);
+                        claimCount = 0;
+                        setClaimTime();
+                    } else {
+                        showNotification(`You have claimed an item. Total claims: ${claimCount}`);
+                    }
+
+                    currentIndex = (currentIndex + 1) % boxes.length;
+                    claimedImage = null;
+                    paidButtonClicked = false; // Reset Paid button status
+                }
+            });
+
+            backButton.addEventListener("click", () => {
+                window.history.back(); // Go to the previous page in history
+            });
+        });
+    </script>
+</body>
+</html>

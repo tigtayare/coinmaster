@@ -1,0 +1,248 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>AirDrop Tasks</title>
+    <style>
+        body {
+            background-color: black;
+            color: white;
+            text-align: center;
+            font-family: Arial, sans-serif;
+        }
+        .container {
+            padding-top: 50px;
+        }
+        .header {
+            font-size: 2.5em;
+            margin-bottom: 20px;
+            display: flex; /* Ku dar flexbox */
+            justify-content: space-between; /* Meel ka dhig */
+            align-items: center; /* Kordhi dhexda */
+        }
+        .sub-header {
+            font-size: 1.2em;
+            margin-bottom: 40px;
+        }
+        .task {
+            background-color: #2196F3;
+            padding: 20px;
+            border-radius: 10px;
+            display: inline-block;
+            margin-top: 20px;
+            cursor: pointer;
+            width: 80%;
+            max-width: 400px;
+        }
+        .task img {
+            width: 40px;
+            vertical-align: middle;
+        }
+        .task span {
+            vertical-align: middle;
+            font-size: 1.2em;
+            margin-left: 10px;
+        }
+        .modal, .wallet-modal, .address-modal {
+            display: none;
+            position: fixed;
+            z-index: 1;
+            left: 0;
+            top: 0;
+            width: 100%;
+            height: 100%;
+            overflow: auto;
+            background-color: rgba(0,0,0,0.7);
+        }
+        .modal-content {
+            background-color: #1c1c1e;
+            margin: 10% auto;
+            padding: 20px;
+            border: 1px solid #888;
+            width: 80%;
+            max-width: 400px;
+            border-radius: 10px;
+            text-align: center;
+            color: white;
+        }
+        .modal-content img {
+            width: 50px;
+        }
+        .modal-content h2 {
+            font-size: 1.5em;
+            margin: 20px 0;
+        }
+        .modal-content button {
+            background-color: #2196F3;
+            border: none;
+            color: white;
+            padding: 15px 20px;
+            text-align: center;
+            text-decoration: none;
+            display: inline-block;
+            font-size: 16px;
+            margin: 10px 0;
+            border-radius: 5px;
+            cursor: pointer;
+            width: 100%;
+        }
+        .close {
+            color: white;
+            font-size: 28px;
+            font-weight: bold;
+            cursor: pointer;
+        }
+        .icon {
+            width: 100px;
+            height: 100px;
+            margin: 0 auto 30px;
+            background-image: url('2.png');
+            background-size: contain;
+            background-repeat: no-repeat;
+            animation: glow 1.5s infinite alternate;
+        }
+        @keyframes glow {
+            from {
+                box-shadow: 0 0 10px #ff0, 0 0 20px #ff0;
+            }
+            to {
+                box-shadow: 0 0 20px #ff0, 0 0 30px #ff0;
+            }
+        }
+        .connected-address {
+            margin-top: 20px;
+            font-size: 1.2em;
+            color: #00FF00;
+        }
+        .connected-address button {
+            background-color: #00FF00;
+            border: none;
+            color: black;
+            padding: 10px 20px;
+            text-align: center;
+            text-decoration: none;
+            display: inline-block;
+            font-size: 16px;
+            margin-top: 10px;
+            border-radius: 5px;
+            cursor: pointer;
+        }
+        .address-modal-content input {
+            width: calc(100% - 20px);
+            padding: 10px;
+            margin: 20px 0;
+            border-radius: 5px;
+            border: 1px solid #ccc;
+            color: black;
+        }
+        .back-button {
+            background-color: #ff4c4c; /* Midabka badhanka */
+            color: white;
+            border: none;
+            padding: 10px 15px;
+            text-align: center;
+            text-decoration: none;
+            display: inline-block;
+            font-size: 16px;
+            margin-left: 20px; /* Fogaanta bidix */
+            border-radius: 5px;
+            cursor: pointer;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="header">
+            AirDrop Tasks
+            <button class="back-button" onclick="goBack()">Back</button>
+        </div>
+        <div class="sub-header">Complete the task below to connect your wallet:</div>
+
+        <!-- Task for connecting wallet -->
+        <div id="task" class="task" onclick="showMainModal()">
+            <img src="2.png" alt="TON Wallet">
+            <span>Connect your TON wallet</span>
+        </div>
+
+        <!-- Wallet Address Display -->
+        <div id="connectedInfo" class="connected-address" style="display: none;">
+            <p>Address: <span id="addressDisplay"></span>...</p>
+            <button onclick="resetConnection()">Disconnect</button>
+        </div>
+    </div>
+
+    <!-- Modal for Connecting Wallet -->
+    <div id="mainModal" class="modal">
+        <div class="modal-content">
+            <span class="close" onclick="hideMainModal()">&times;</span>
+            <h2>Connect your TON wallet</h2>
+            <p>Connect your wallet by selecting below:</p>
+            <button onclick="showAddressModal()">Proceed to Wallet</button>
+        </div>
+    </div>
+
+    <!-- Address Modal -->
+    <div id="addressModal" class="address-modal">
+        <div class="address-modal-content">
+            <span class="close" onclick="hideAddressModal()">&times;</span>
+            <h2>Enter Wallet Address</h2>
+            <input type="text" id="walletAddress" placeholder="Paste your address here">
+            <button onclick="connectWallet()">Connect</button>
+        </div>
+    </div>
+
+    <script>
+        // Check if a wallet is already connected when the page loads
+        window.onload = function() {
+            const savedAddress = localStorage.getItem('walletAddress');
+            if (savedAddress) {
+                document.getElementById('addressDisplay').textContent = savedAddress;
+                document.getElementById('connectedInfo').style.display = 'block';
+                document.getElementById('task').style.display = 'none';
+            }
+        };
+
+        function showMainModal() {
+            document.getElementById('mainModal').style.display = 'block';
+        }
+
+        function hideMainModal() {
+            document.getElementById('mainModal').style.display = 'none';
+        }
+
+        function showAddressModal() {
+            document.getElementById('mainModal').style.display = 'none';
+            document.getElementById('addressModal').style.display = 'block';
+        }
+
+        function hideAddressModal() {
+            document.getElementById('addressModal').style.display = 'none';
+        }
+
+        function connectWallet() {
+            var address = document.getElementById('walletAddress').value;
+            if (address) {
+                document.getElementById('addressDisplay').textContent = address;
+                document.getElementById('connectedInfo').style.display = 'block';
+                document.getElementById('task').style.display = 'none';
+                localStorage.setItem('walletAddress', address);  // Save the address to LocalStorage
+                hideAddressModal();
+            } else {
+                alert('Please enter a valid wallet address.');
+            }
+        }
+
+        function resetConnection() {
+            document.getElementById('addressDisplay').textContent = '';
+            document.getElementById('connectedInfo').style.display = 'none';
+            document.getElementById('task').style.display = 'block';
+            localStorage.removeItem('walletAddress'); // Remove from LocalStorage
+        }
+
+        function goBack() {
+            window.history.back(); // Badhanka "Back" ayaa dib u celin doona
+        }
+    </script>
+</body>
+</html>

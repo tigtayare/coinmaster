@@ -1,0 +1,294 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Earn More Coins</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            background-color: #000;
+            color: #fff;
+            margin: 0;
+            padding: 0;
+        }
+
+        .container {
+            width: 100%;
+            max-width: 500px;
+            margin: 0 auto;
+            padding: 20px;
+            background-color: #121212;
+            border-radius: 10px;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+        }
+
+        .header {
+            text-align: center;
+            margin-bottom: 20px;
+        }
+
+        .header h1 {
+            font-size: 24px;
+            font-weight: bold;
+            color: #ffcc00;
+        }
+
+        .youtube-section, .daily-tasks, .tasks-list {
+            margin-bottom: 20px;
+        }
+
+        .youtube-section h2, .daily-tasks h2, .tasks-list h2 {
+            font-size: 18px;
+            margin-bottom: 10px;
+            padding-bottom: 5px;
+            color: #ffcc00;
+            border-bottom: 1px solid #444;
+        }
+
+        .task {
+            display: flex;
+            align-items: center;
+            background-color: #333;
+            padding: 10px;
+            border-radius: 10px;
+            margin-bottom: 10px;
+            cursor: pointer;
+            transition: background-color 0.3s, box-shadow 0.3s;
+            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+        }
+
+        .task:hover {
+            background-color: #444;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+        }
+
+        .task img {
+            width: 30px;
+            height: 30px;
+            margin-right: 10px;
+        }
+
+        .task-info {
+            flex-grow: 1;
+        }
+
+        .task-info p {
+            margin: 0;
+            font-size: 16px;
+        }
+
+        .coins {
+            font-size: 16px;
+            color: #ffcc00;
+        }
+
+        .checkmark {
+            width: 20px;
+            height: 20px;
+            display: none;
+        }
+
+        .task.completed .checkmark {
+            display: block;
+        }
+
+        .celebration, .invite-popup, .timer-popup {
+            display: none;
+            position: fixed;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            background-color: rgba(0, 0, 0, 0.8);
+            padding: 20px;
+            border-radius: 10px;
+            color: #ffcc00;
+            font-size: 18px;
+            text-align: center;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.5);
+        }
+
+        .celebration.show, .invite-popup.show, .timer-popup.show {
+            display: block;
+            animation: fadeIn 1s ease-out;
+        }
+
+        @keyframes fadeIn {
+            from { opacity: 0; }
+            to { opacity: 1; }
+        }
+
+        .invite-popup input, .timer-popup input {
+            width: 100%;
+            padding: 10px;
+            margin-top: 10px;
+            background-color: #333;
+            border: 1px solid #444;
+            border-radius: 5px;
+            color: #fff;
+        }
+
+        #back-button {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            padding: 20px;
+            margin-top: 20px;
+        }
+
+        #back-button a {
+            display: inline-block;
+            padding: 10px 20px;
+            background-color: #ffcc00;
+            color: #000;
+            font-size: 18px;
+            text-decoration: none;
+            border-radius: 8px;
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.2);
+            transition: background-color 0.3s, transform 0.3s;
+        }
+
+        #back-button a:hover {
+            background-color: #e6b800;
+            transform: scale(1.05);
+        }
+
+        #back-button a img {
+            width: 20px;
+            height: 20px;
+            margin-right: 10px;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <header class="header">
+            <h1>Earn more coins</h1>
+        </header>
+        <main>
+            <section class="youtube-section">
+                <h2>Hamster Youtube</h2>
+                <div class="task" onclick="handleTaskClick(this, 'https://www.youtube.com/watch?v=video1', 'video1')">
+                    <img src="logo-youtube (1).webp" alt="YouTube">
+                    <div class="task-info">
+                        <p>Microstrategy buying more Bitcoin</p>
+                        <span class="coins">+100,000</span>
+                    </div>
+                </div>
+                <div class="task" onclick="handleTaskClick(this, 'https://www.youtube.com/watch?v=video2', 'video2')">
+                    <img src="logo-youtube (1).webp" alt="YouTube">
+                    <div class="task-info">
+                        <p>Winklevoss twins: Harvard grads, Facebook trial, Crypto fortune</p>
+                        <span class="coins">+100,000</span>
+                    </div>
+                </div>
+            </section>
+            <section class="daily-tasks">
+                <h2>Daily tasks</h2>
+                <div class="task" onclick="handleTaskClick(this, 'daily-reward', 'daily-reward')">
+                    <img src="daily-reward.png" alt="Daily Reward">
+                    <div class="task-info">
+                        <p>Daily reward</p>
+                        <span class="coins">+6,649,000</span>
+                    </div>
+                </div>
+            </section>
+            <section class="tasks-list">
+                <h2>Tasks list</h2>
+                <div class="task" onclick="handleTaskClick(this, 'https://t.me/joinchat/yourchannel')">
+                    <img src="Telegram_logo (1).webp" alt="Telegram">
+                    <div class="task-info">
+                        <p>Join our TG channel</p>
+                        <span class="coins">+5,000</span>
+                    </div>
+                    <img src="121212.jpg" alt="Completed" class="checkmark">
+                </div>
+                <div class="task" onclick="handleTaskClick(this, 'https://twitter.com/youraccount')">
+                    <img src="xxx.png" alt="X">
+                    <div class="task-info">
+                        <p>Follow our X account</p>
+                        <span class="coins">+5,000</span>
+                    </div>
+                    <img src="121212.jpg" alt="Completed" class="checkmark">
+                </div>
+                <div class="task" onclick="handleTaskClick(this, 'choose-exchange.html')">
+                    <img src="binance-logo.png" alt="Exchange">
+                    <div class="task-info">
+                        <p>Choose your exchange</p>
+                        <span class="coins">+5,000</span>
+                    </div>
+                    <img src="121212.jpg" alt="Completed" class="checkmark">
+                </div>
+                <div class="task" data-id="invite" onclick="handleInviteClick(this)">
+                    <img src="invite-friends-icon-11.webp" alt="Invite">
+                    <div class="task-info">
+                        <p>Invite 3 friends</p>
+                        <span class="coins">+25,000</span>
+                    </div>
+                    <img src="121212.jpg" alt="Completed" class="checkmark">
+                </div>
+            </section>
+        </main>
+        <div id="back-button">
+            <a href="#"><img src="back-icon.png" alt="Back">Back</a>
+        </div>
+    </div>
+    
+    <div id="celebration" class="celebration"></div>
+    <div id="invite-popup" class="invite-popup"></div>
+    <div id="timer-popup" class="timer-popup"></div>
+
+    <script>
+        function handleTaskClick(element, url, taskId) {
+            const now = Date.now();
+            const lastReward = localStorage.getItem(taskId);
+
+            if (lastReward && now - lastReward < 24 * 60 * 60 * 1000) {
+                const remainingTime = 24 * 60 * 60 * 1000 - (now - lastReward);
+                const hours = Math.floor(remainingTime / (1000 * 60 * 60));
+                const minutes = Math.floor((remainingTime % (1000 * 60 * 60)) / (1000 * 60));
+                const seconds = Math.floor((remainingTime % (1000 * 60)) / 1000);
+
+                const timerPopup = document.getElementById('timer-popup');
+                timerPopup.innerHTML = `
+                    <p>You need to wait before you can claim this reward again.</p>
+                    <p>Remaining time: ${hours} hours, ${minutes} minutes, and ${seconds} seconds.</p>
+                `;
+                timerPopup.classList.add('show');
+            } else {
+                if (taskId === 'daily-reward') {
+                    // Handle daily reward
+                    const celebration = document.getElementById('celebration');
+                    celebration.innerHTML = '<p>Congratulations! You have earned your daily reward.</p>';
+                    celebration.classList.add('show');
+                } else if (taskId === 'invite') {
+                    handleInviteClick(element);
+                } else {
+                    window.location.href = url;
+                }
+                localStorage.setItem(taskId, now);
+            }
+        }
+
+        function handleInviteClick(element) {
+            const invitePopup = document.getElementById('invite-popup');
+            const inviteLink = generateInviteLink();
+            
+            invitePopup.innerHTML = `
+                <p>Share this link with your friends to earn rewards:</p>
+                <input type="text" value="${inviteLink}" readonly>
+            `;
+            invitePopup.classList.add('show');
+        }
+
+        function generateInviteLink() {
+            return `https://yourwebsite.com/invite?code=${Math.random().toString(36).substring(2, 15)}`;
+        }
+
+        document.getElementById('back-button').addEventListener('click', function(event) {
+            event.preventDefault();
+            window.history.back();
+        });
+    </script>
+</body>
+</html>
